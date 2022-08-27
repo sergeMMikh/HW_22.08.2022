@@ -10,7 +10,7 @@ class Sensor(models.Model):
         verbose_name_plural = 'Датчики'
 
 
-class TemperatureMeasurement(models.Model):
+class Measurement(models.Model):
     detector_id = models.ForeignKey(Sensor, on_delete=models.CASCADE, related_name='measurement')
     temperature = models.FloatField(verbose_name='Температура при измерения')
     date = models.DateTimeField(verbose_name='Дата измерения')
