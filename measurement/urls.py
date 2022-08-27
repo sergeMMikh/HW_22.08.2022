@@ -1,5 +1,6 @@
 from django.urls import path
+from measurement.views import smart_home
 
 urlpatterns = [
-    # TODO: зарегистрируйте необходимые маршруты
+    path('demo/', smart_home, name='smart_home'),
 ]
