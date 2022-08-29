@@ -11,9 +11,14 @@ class Sensor(models.Model):
 
 
 class Measurement(models.Model):
-    detector_id = models.ForeignKey(Sensor, on_delete=models.CASCADE, related_name='measurement')
-    temperature = models.FloatField(verbose_name='Температура при измерения')
-    date = models.DateTimeField(verbose_name='Дата измерения')
+    detector_id = models.ForeignKey(Sensor,
+                                    on_delete=models.CASCADE,
+                                    related_name='measurement',
+                                    verbose_name='Измерение')
+    temperature = models.FloatField(verbose_name='Температура при измерении')
+    date = models.DateTimeField(auto_now_add=True,
+                                auto_now=False,
+                                verbose_name='Дата измерения')
 
     class Meta:
         verbose_name = 'Измерение температуры'

@@ -3,40 +3,33 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView
 from .serializers import SensorSerializer, MeasurementSerializer, SensorDetailSerializer
 
 from .models import Sensor, Measurement
 
-
-# @api_view(['GET', 'POST'])
-# def sensors_list(request):
-#     if request.method == 'GET':
-#         sensors = Sensor.objects.all()
-#         ser_sens = SensorSerializer(sensors, many=True)
-#         data = {'message': 'Hellow'}
-#         return Response(ser_sens.data)
-#     if request.method == 'POST':
-#         return Response({'status': 'Ok'})
-
-# class SensorsView(APIView):
-#     def get(self, request):
-#         sensors = Sensor.objects.all()
-#         ser_sens = SensorSerializer(sensors, many=True)
-#         data = {'message': 'Hellow'}
-#         return Response(ser_sens.data)
-#
-#     def post(self, request):
-#         return Response({'status': 'Ok'})
 
 class SensorsView(ListAPIView):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
 
     def post(self, request):
+        Sensor.objects.create(name=request.POST.get('name'),
+                              description=request.POST.get('description'))
         return Response({'status': 'Ok'})
 
 
-class SensorView(RetrieveAPIView):
+class SensorView(RetrieveUpdateAPIView):
     queryset = Sensor.objects.all()
     serializer_class = SensorDetailSerializer
+
+
+class MeasurementView(ListAPIView):
+    queryset = Measurement.objects.all()
+    serializer_class = MeasurementSerializer
+
+    def post(self, request):
+        detector_id = Sensor.objects.get(id=request.POST.get('detector_id'))
+        Measurement.objects.create(detector_id=detector_id,
+                                   temperature=request.POST.get('temperature'))
+        return Response({'status': 'Ok'})
